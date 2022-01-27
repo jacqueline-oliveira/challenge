@@ -36,7 +36,7 @@ public class ReceitaService {
     }
 
   
-    public Optional<ReceitaDto> obterPorId(String id) {
+    public Optional<ReceitaDto> obterPorId(Long id) {
         Optional<Receita> receita = repository.findById(id);
         
         if (receita.isPresent()) {
@@ -46,11 +46,11 @@ public class ReceitaService {
         return Optional.empty();     
     }
 
-    public void excluir(String id) {
+    public void excluir(Long id) {
         repository.deleteById(id);
     }
 
-    public ReceitaDto atualizar(String id, ReceitaDto dto) {
+    public ReceitaDto atualizar(Long id, ReceitaDto dto) {
         Receita receita = modelMapper.map(dto, Receita.class);
         receita.setId(id);
         receita = repository.save(receita);

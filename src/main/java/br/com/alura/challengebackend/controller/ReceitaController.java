@@ -36,7 +36,7 @@ public class ReceitaController {
     }
 
     @GetMapping("/{id}")
-	public ResponseEntity<ReceitaDto> detalhar(@PathVariable @NotNull String id) {
+	public ResponseEntity<ReceitaDto> detalhar(@PathVariable @NotNull Long id) {
 		Optional<ReceitaDto> dto = service.obterPorId(id);
 
         if (dto.isPresent()) {
@@ -54,13 +54,13 @@ public class ReceitaController {
 	}
 
     @PutMapping("/{id}")
-	public ResponseEntity<ReceitaDto> atualizar(@PathVariable String id, @RequestBody @Valid ReceitaDto dto) {
+	public ResponseEntity<ReceitaDto> atualizar(@PathVariable Long id, @RequestBody @Valid ReceitaDto dto) {
 		ReceitaDto atualizada = service.atualizar(id, dto);
 		return ResponseEntity.ok(atualizada);
 	}
 
     @DeleteMapping("/{id}")
-	public ResponseEntity<ReceitaDto> remover(@PathVariable @NotNull String id) {
+	public ResponseEntity<ReceitaDto> remover(@PathVariable @NotNull Long id) {
 		service.excluir(id);
 		return ResponseEntity.noContent().build();
 	}

@@ -1,23 +1,25 @@
 package br.com.alura.challengebackend.model;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import org.springframework.data.annotation.Id;
-
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Recurso {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String descricao;
     private BigDecimal valor;
     private LocalDate data;
 
 
-    public String getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

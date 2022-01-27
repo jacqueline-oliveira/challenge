@@ -36,7 +36,7 @@ public class DespesaController {
         }
     
         @GetMapping("/{id}")
-        public ResponseEntity<DespesaDto> detalhar(@PathVariable @NotNull String id) {
+        public ResponseEntity<DespesaDto> detalhar(@PathVariable @NotNull Long id) {
             Optional<DespesaDto> dto = service.obterPorId(id);
     
             if (dto.isPresent()) {
@@ -54,7 +54,7 @@ public class DespesaController {
         }
     
         @PutMapping("/{id}")
-        public ResponseEntity<DespesaDto> atualizar(@PathVariable String id, @RequestBody @Valid DespesaDto dto) {
+        public ResponseEntity<DespesaDto> atualizar(@PathVariable Long id, @RequestBody @Valid DespesaDto dto) {
             Optional<DespesaDto> despesa = service.obterPorId(id);
            
             if (despesa.isPresent()){  
@@ -65,7 +65,7 @@ public class DespesaController {
         }
     
         @DeleteMapping("/{id}")
-        public ResponseEntity<DespesaDto> remover(@PathVariable @NotNull String id) {
+        public ResponseEntity<DespesaDto> remover(@PathVariable @NotNull Long id) {
             service.excluir(id);
             return ResponseEntity.noContent().build();
         }

@@ -1,8 +1,8 @@
 package br.com.alura.challengebackend.model;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
 
-@Document("receitas")
+@Entity
 public class Receita extends Recurso{
     
 }

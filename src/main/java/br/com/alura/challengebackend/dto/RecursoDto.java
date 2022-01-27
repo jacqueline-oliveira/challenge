@@ -1,5 +1,7 @@
 package br.com.alura.challengebackend.dto;
 
+import br.com.alura.challengebackend.model.Categoria;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -14,6 +16,7 @@ public class RecursoDto {
     @Positive(message = "Valor deve ser informado")
     private BigDecimal valor;
     private LocalDate data;
+
     
     public String getId() {
         return id;
@@ -38,5 +41,7 @@ public class RecursoDto {
     }
     public void setData(LocalDate data) {
         this.data = data;
-    } 
+    }
+
+
 }
