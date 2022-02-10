@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,18 +16,23 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReceitaService {
 
-	private final ReceitaRepository repository;
-	private final ModelMapper modelMapper;
+    private final ReceitaRepository repository;
+    private final ModelMapper modelMapper;
 
     public List<ReceitaDto> listar() {
-       List<Receita> receitas = repository.findAll(); 
-       
-       return receitas.stream()
-        .map(c -> modelMapper.map(c, ReceitaDto.class))
-        .collect(Collectors.toList());
+        List<Receita> receitas = repository.findAll();
+
+        return receitas.stream()
+                .map(c -> modelMapper.map(c, ReceitaDto.class))
+                .collect(Collectors.toList());
     }
- 
+
     public ReceitaDto cadastrar(ReceitaDto dto) {
+        boolean receitaJaCadastradaNoMes = repository.isReceitaJaCadastrada(dto.getDescricao(), dto.getData().getYear(), dto.getData().getMonthValue());
+        if (receitaJaCadastradaNoMes) {
+            throw new ValidationException("Receita já cadastrada no mês!");
+        }
+
         Receita receita = modelMapper.map(dto, Receita.class);
         receita = repository.save(receita);
         return modelMapper.map(receita, ReceitaDto.class);
@@ -34,12 +40,12 @@ public class ReceitaService {
 
     public Optional<ReceitaDto> obterPorId(Long id) {
         Optional<Receita> receita = repository.findById(id);
-        
+
         if (receita.isPresent()) {
-            return Optional.of(modelMapper.map(receita.get(), ReceitaDto.class));  
+            return Optional.of(modelMapper.map(receita.get(), ReceitaDto.class));
         }
 
-        return Optional.empty();     
+        return Optional.empty();
     }
 
     public void excluir(Long id) {
@@ -52,5 +58,5 @@ public class ReceitaService {
         receita = repository.save(receita);
         return modelMapper.map(receita, ReceitaDto.class);
     }
-    
+
 }

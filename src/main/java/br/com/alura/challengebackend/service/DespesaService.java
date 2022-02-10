@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,6 +29,11 @@ public class DespesaService {
     }
 
     public DespesaDto cadastrar(DespesaDto dto) {
+        boolean despesaJaCadastradaNoMes = repository.isDespesaJaCadastrada(dto.getDescricao(), dto.getData().getYear(), dto.getData().getMonthValue());
+        if (despesaJaCadastradaNoMes) {
+            throw new ValidationException("Despesa já cadastrada no mês!");
+        }
+
         Despesa despesa = modelMapper.map(dto, Despesa.class);
 
         if (despesa.getCategoria() == null) {
