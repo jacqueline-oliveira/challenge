@@ -1,38 +1,28 @@
 package br.com.alura.challengebackend.controller;
 
+import br.com.alura.challengebackend.dto.ReceitaDto;
+import br.com.alura.challengebackend.service.ReceitaService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import br.com.alura.challengebackend.dto.ReceitaDto;
-import br.com.alura.challengebackend.service.ReceitaService;
-
 @RestController
 @RequestMapping("/receitas")
+@RequiredArgsConstructor
 public class ReceitaController {
 
-    @Autowired
-    private ReceitaService service;
+    private final ReceitaService service;
 
     @GetMapping
     public ResponseEntity<List<ReceitaDto>> listarTodos() {
-       return new ResponseEntity<>(service.listar(), HttpStatus.FOUND);
+       return ResponseEntity.ok(service.listar());
     }
 
     @GetMapping("/{id}")
@@ -40,10 +30,10 @@ public class ReceitaController {
 		Optional<ReceitaDto> dto = service.obterPorId(id);
 
         if (dto.isPresent()) {
-            return new ResponseEntity<>(dto.get(), HttpStatus.FOUND);    
+            return ResponseEntity.ok(dto.get());
         }
 
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.notFound().build();
 	}
 
     @PostMapping
@@ -55,16 +45,25 @@ public class ReceitaController {
 
     @PutMapping("/{id}")
 	public ResponseEntity<ReceitaDto> atualizar(@PathVariable Long id, @RequestBody @Valid ReceitaDto dto) {
-		ReceitaDto atualizada = service.atualizar(id, dto);
-		return ResponseEntity.ok(atualizada);
+		Optional<ReceitaDto> receita = service.obterPorId(id);
+
+		if (receita.isPresent()) {
+			return ResponseEntity.ok(service.atualizar(id, dto));
+		}
+
+		return ResponseEntity.notFound().build();
 	}
 
     @DeleteMapping("/{id}")
 	public ResponseEntity<ReceitaDto> remover(@PathVariable @NotNull Long id) {
-		service.excluir(id);
-		return ResponseEntity.noContent().build();
+		Optional<ReceitaDto> dto = service.obterPorId(id);
+
+		if (dto.isPresent()) {
+			service.excluir(id);
+			return ResponseEntity.noContent().build();
+		}
+
+		return ResponseEntity.notFound().build();
 	}
 
-
-    
 }

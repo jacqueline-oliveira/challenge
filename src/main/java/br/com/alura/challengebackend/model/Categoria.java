@@ -9,6 +9,6 @@ public enum Categoria {
     EDUCACAO,
     LAZER,
     IMPREVISTOS,
-    OUTROS;
+    OUTRAS;
 
 }

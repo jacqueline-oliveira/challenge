@@ -1,0 +1,1 @@
+alter table despesas add categoria varchar(100) not null default 'OUTRAS';

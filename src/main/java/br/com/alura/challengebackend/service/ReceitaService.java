@@ -1,26 +1,23 @@
 package br.com.alura.challengebackend.service;
 
+import br.com.alura.challengebackend.dto.ReceitaDto;
+import br.com.alura.challengebackend.model.Receita;
+import br.com.alura.challengebackend.repository.ReceitaRepository;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import br.com.alura.challengebackend.dto.ReceitaDto;
-import br.com.alura.challengebackend.model.Receita;
-import br.com.alura.challengebackend.repository.ReceitaRepository;
-
 @Service
+@RequiredArgsConstructor
 public class ReceitaService {
-    @Autowired
-	private ReceitaRepository repository;
 
-    @Autowired
-	private ModelMapper modelMapper;
+	private final ReceitaRepository repository;
+	private final ModelMapper modelMapper;
 
-  
     public List<ReceitaDto> listar() {
        List<Receita> receitas = repository.findAll(); 
        
@@ -35,7 +32,6 @@ public class ReceitaService {
         return modelMapper.map(receita, ReceitaDto.class);
     }
 
-  
     public Optional<ReceitaDto> obterPorId(Long id) {
         Optional<Receita> receita = repository.findById(id);
         
